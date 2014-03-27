@@ -4,16 +4,16 @@ Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 ActiveRecord::Base.establish_connection(YAML::load(File.open('./db/config.yml'))["development"])
 
 def main_menu
-
+  system('clear')
   choice = nil
   until choice == 'e'
-    puts 'Welcome to your calendar'
-    puts 'What do you want to do?'
-    puts 'Type l to list all your events'
-    puts 'Type ld to list all your events in order'
-    puts 'Type a to add an event'
-    puts 'Type ls to look at events on a specific day, week, or month'
-    puts 'Type e to exit'
+    puts ' '*20 + 'Welcome to your calendar'
+    puts ' '*20 + 'What do you want to do?'
+    puts ' '*20 + 'Type l to list all your events'
+    puts ' '*20 + 'Type ld to list all your events in order'
+    puts ' '*20 + 'Type a to add an event'
+    puts ' '*20 + 'Type ls to look at events on a specific day, week, or month'
+    puts ' '*20 + 'Type e to exit'
 
     choice = gets.chomp
     case choice
@@ -66,7 +66,7 @@ def lookup_events_specific
       whole_month = whole_month.to_date
       look_up_by_month(whole_month)
     when 'e'
-      Goodbye
+      puts "Go back to Main Menu"
     else
       puts "Invalid"
     end
@@ -79,22 +79,24 @@ def look_up_by_day(day_choice)
   # day_choice = gets.chomp
   events = Event.where(start_date: day_choice)
 
-  puts "Here are the events on '#{day_choice}'"
+  puts ' '*20 + "Here are the events on '#{day_choice}'\n\n\n"
+
   events.each do |event|
-    puts event.description
+    puts ' '*20 + event.description
   end
   change_day(day_choice)
 end
 def change_day(day_choice)
-  puts 'to see the events on the the next day type "n"'
-  puts 'to see the events on the the next week type "w"'
-  puts 'to see the events on the the next month type "m"'
-  puts 'to see the events on the the next year type "y"'
-  puts 'to see the events on the previous day type "p"'
-  puts 'to see the events on the previous week type "pw"'
-  puts 'to see the events on the previous month type "pm"'
-  puts 'to see the events on the previous year type "py"'
-  puts 'to return to the main menu type main'
+  puts "\n\n"
+  puts ' '*20 + 'to see the events on the the next day type "n"'
+  puts ' '*20 + 'to see the events on the the next week type "w"'
+  puts ' '*20 + 'to see the events on the the next month type "m"'
+  puts ' '*20 + 'to see the events on the the next year type "y"'
+  puts ' '*20 + 'to see the events on the previous day type "p"'
+  puts ' '*20 + 'to see the events on the previous week type "pw"'
+  puts ' '*20 + 'to see the events on the previous month type "pm"'
+  puts ' '*20 + 'to see the events on the previous year type "py"'
+  puts ' '*20 + 'to return to the main menu type main'
   case gets.chomp
   when 'n'
     look_up_by_day(day_choice.to_date + 1.day)
@@ -116,30 +118,31 @@ def change_day(day_choice)
     main_menu
   else
     puts 'that is not a valid option'
+    change_day(day_choice)
   end
 end
 
 def look_up_by_week(week_choice)
   system('clear')
   events = Event.where("start_date between ? and ?", week_choice, (week_choice.to_date+5.days))
-  puts "Here are the events between #{week_choice} and #{week_choice.to_date+5.days}"
+  puts ' '*20 + "Here are the events between #{week_choice} and #{week_choice.to_date+5.days}"
 
   events.each do |event|
-    puts event.description
+    puts ' '*20 + event.description
   end
   change_week(week_choice)
 end
 
 def change_week(week_choice)
-  puts 'to see the events on the the next day type "n"'
-  puts 'to see the events on the the next week type "w"'
-  puts 'to see the events on the the next month type "m"'
-  puts 'to see the events on the the next year type "y"'
-  puts 'to see the events on the previous day type "p"'
-  puts 'to see the events on the previous week type "pw"'
-  puts 'to see the events on the previous month type "pm"'
-  puts 'to see the events on the previous year type "py"'
-  puts 'to return to the main menu type main'
+  puts ' '*20 + 'to see the events on the the next day type "n"'
+  puts ' '*20 + 'to see the events on the the next week type "w"'
+  puts ' '*20 + 'to see the events on the the next month type "m"'
+  puts ' '*20 + 'to see the events on the the next year type "y"'
+  puts ' '*20 + 'to see the events on the previous day type "p"'
+  puts ' '*20 + 'to see the events on the previous week type "pw"'
+  puts ' '*20 + 'to see the events on the previous month type "pm"'
+  puts ' '*20 + 'to see the events on the previous year type "py"'
+  puts ' '*20 + 'to return to the main menu type main'
   case gets.chomp
   when 'n'
     look_up_by_week(week_choice.to_date + 1.day)
@@ -161,30 +164,31 @@ def change_week(week_choice)
     main_menu
   else
     puts 'that is not a valid option'
+    change_week(week_choice)
   end
 end
 
 def look_up_by_month(whole_month)
   system('clear')
   events = Event.where("start_date between ? and ?", whole_month, (whole_month.to_date+1.month))
-  puts "Here are the events between #{whole_month} and #{whole_month.to_date+1.month}"
+  puts ' '*20 + "Here are the events between #{whole_month} and #{whole_month.to_date+1.month}"
 
   events.each do |event|
-    puts "#{event.description} is on #{event.start_date}"
+    puts ' '*20 + "#{event.description} is on #{event.start_date}"
   end
   change_month(whole_month)
 end
 
 def change_month(whole_month)
-  puts 'to see the events on the the next day type "n"'
-  puts 'to see the events on the the next week type "w"'
-  puts 'to see the events on the the next month type "m"'
-  puts 'to see the events on the the next year type "y"'
-  puts 'to see the events on the previous day type "p"'
-  puts 'to see the events on the previous week type "pw"'
-  puts 'to see the events on the previous month type "pm"'
-  puts 'to see the events on the previous year type "py"'
-  puts 'to return to the main menu type main'
+  puts ' '*20 + 'to see the events on the the next day type "n"'
+  puts ' '*20 + 'to see the events on the the next week type "w"'
+  puts ' '*20 + 'to see the events on the the next month type "m"'
+  puts ' '*20 + 'to see the events on the the next year type "y"'
+  puts ' '*20 + 'to see the events on the previous day type "p"'
+  puts ' '*20 + 'to see the events on the previous week type "pw"'
+  puts ' '*20 + 'to see the events on the previous month type "pm"'
+  puts ' '*20 + 'to see the events on the previous year type "py"'
+  puts ' '*20 + 'to return to the main menu type main'
   case gets.chomp
   when 'n'
     look_up_by_month(whole_month.to_date + 1.day)
@@ -206,6 +210,7 @@ def change_month(whole_month)
     main_menu
   else
     puts 'that is not a valid option'
+    change_month(whole_month)
   end
 end
 
