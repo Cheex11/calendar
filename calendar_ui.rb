@@ -50,11 +50,21 @@ def lookup_events_specific
   choice = gets.chomp
     case choice
     when 'd'
-      look_up_by_day
+      puts "Please enter a day to see what events start that day yyyy-mm-dd"
+      day_choice = gets.chomp
+      look_up_by_day(day_choice)
     when 'w'
-      look_up_by_week
+      puts 'Please enter the first day of the week you want to see events for (yyyy-mm-dd)'
+      week_choice = gets.chomp
+      look_up_by_week(week_choice)
     when 'm'
-      look_up_by_month
+      puts 'Please enter the month you want to see events for (mm)'
+      month_choice = gets.chomp
+      puts 'Pleae enter the year you want to see events for (yyyy)'
+      year_choice = gets.chomp
+      whole_month = "01/#{month_choice}/#{year_choice}"
+      whole_month = whole_month.to_date
+      look_up_by_month(whole_month)
     when 'e'
       Goodbye
     else
@@ -63,42 +73,139 @@ def lookup_events_specific
   end
 end
 
-def look_up_by_day
-  puts "Please enter a day to see what events start that day yyyy-mm-dd"
-  day_choice = gets.chomp
+def look_up_by_day(day_choice)
+  system('clear')
+  # puts "Please enter a day to see what events start that day yyyy-mm-dd"
+  # day_choice = gets.chomp
   events = Event.where(start_date: day_choice)
 
   puts "Here are the events on '#{day_choice}'"
   events.each do |event|
     puts event.description
   end
+  change_day(day_choice)
+end
+def change_day(day_choice)
+  puts 'to see the events on the the next day type "n"'
+  puts 'to see the events on the the next week type "w"'
+  puts 'to see the events on the the next month type "m"'
+  puts 'to see the events on the the next year type "y"'
+  puts 'to see the events on the previous day type "p"'
+  puts 'to see the events on the previous week type "pw"'
+  puts 'to see the events on the previous month type "pm"'
+  puts 'to see the events on the previous year type "py"'
+  puts 'to return to the main menu type main'
+  case gets.chomp
+  when 'n'
+    look_up_by_day(day_choice.to_date + 1.day)
+  when 'p'
+    look_up_by_day(day_choice.to_date - 1.day)
+  when 'w'
+    look_up_by_day(day_choice.to_date + 1.week)
+  when 'm'
+    look_up_by_day(day_choice.to_date + 1.month)
+  when 'y'
+    look_up_by_day(day_choice.to_date + 1.year)
+  when 'pw'
+    look_up_by_day(day_choice.to_date - 1.week)
+  when 'pm'
+    look_up_by_day(day_choice.to_date - 1.month)
+  when 'py'
+    look_up_by_day(day_choice.to_date - 1.year)
+  when 'main'
+    main_menu
+  else
+    puts 'that is not a valid option'
+  end
 end
 
-def look_up_by_week
-  puts 'Please enter the first day of the week you want to see events for (yyyy-mm-dd)'
-  week_choice = gets.chomp
+def look_up_by_week(week_choice)
+  system('clear')
   events = Event.where("start_date between ? and ?", week_choice, (week_choice.to_date+5.days))
   puts "Here are the events between #{week_choice} and #{week_choice.to_date+5.days}"
 
   events.each do |event|
     puts event.description
   end
+  change_week(week_choice)
 end
 
-def look_up_by_month
-  puts 'Please enter the month you want to see events for (mm)'
-  month_choice = gets.chomp
-  puts 'Pleae enter the year you want to see events for (yyyy)'
-  year_choice = gets.chomp
+def change_week(week_choice)
+  puts 'to see the events on the the next day type "n"'
+  puts 'to see the events on the the next week type "w"'
+  puts 'to see the events on the the next month type "m"'
+  puts 'to see the events on the the next year type "y"'
+  puts 'to see the events on the previous day type "p"'
+  puts 'to see the events on the previous week type "pw"'
+  puts 'to see the events on the previous month type "pm"'
+  puts 'to see the events on the previous year type "py"'
+  puts 'to return to the main menu type main'
+  case gets.chomp
+  when 'n'
+    look_up_by_week(week_choice.to_date + 1.day)
+  when 'p'
+    look_up_by_week(week_choice.to_date - 1.day)
+  when 'w'
+    look_up_by_week(week_choice.to_date + 1.week)
+  when 'm'
+    look_up_by_week(week_choice.to_date + 1.month)
+  when 'y'
+    look_up_by_week(week_choice.to_date + 1.year)
+  when 'pw'
+    look_up_by_week(week_choice.to_date - 1.week)
+  when 'pm'
+    look_up_by_week(week_choice.to_date - 1.month)
+  when 'py'
+    look_up_by_week(week_choice.to_date - 1.year)
+  when 'main'
+    main_menu
+  else
+    puts 'that is not a valid option'
+  end
+end
 
-  whole_month = "01/#{month_choice}/#{year_choice}"
-  whole_month = whole_month.to_date
-
+def look_up_by_month(whole_month)
+  system('clear')
   events = Event.where("start_date between ? and ?", whole_month, (whole_month.to_date+1.month))
   puts "Here are the events between #{whole_month} and #{whole_month.to_date+1.month}"
 
   events.each do |event|
     puts "#{event.description} is on #{event.start_date}"
+  end
+  change_month(whole_month)
+end
+
+def change_month(whole_month)
+  puts 'to see the events on the the next day type "n"'
+  puts 'to see the events on the the next week type "w"'
+  puts 'to see the events on the the next month type "m"'
+  puts 'to see the events on the the next year type "y"'
+  puts 'to see the events on the previous day type "p"'
+  puts 'to see the events on the previous week type "pw"'
+  puts 'to see the events on the previous month type "pm"'
+  puts 'to see the events on the previous year type "py"'
+  puts 'to return to the main menu type main'
+  case gets.chomp
+  when 'n'
+    look_up_by_month(whole_month.to_date + 1.day)
+  when 'p'
+    look_up_by_month(whole_month.to_date - 1.day)
+  when 'w'
+    look_up_by_month(whole_month.to_date + 1.week)
+  when 'm'
+    look_up_by_month(whole_month.to_date + 1.month)
+  when 'y'
+    look_up_by_month(whole_month.to_date + 1.year)
+  when 'pw'
+    look_up_by_month(whole_month.to_date - 1.week)
+  when 'pm'
+    look_up_by_month(whole_month.to_date - 1.month)
+  when 'py'
+    look_up_by_month(whole_month.to_date - 1.year)
+  when 'main'
+    main_menu
+  else
+    puts 'that is not a valid option'
   end
 end
 
